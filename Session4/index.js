@@ -4,10 +4,15 @@ const express = require("express");
 const server = express();
 const UserActivityRouter = require("./Routers/UserActivity.Router");
 const HomeRouter = require("./Routers/Home.Router");
+const BlogsRouter = require("./Routers/Blogs.Router");
+const { default: mongoose } = require("mongoose");
 const PORT = 8091;
 
-// Home Activity
-// (req, res) => { } - request handler 
+
+
+// universal middleware to parse the body of the request
+server.use(express.json()); // it parses the req body
+
 
 server.use("/", HomeRouter);
 
@@ -35,6 +40,23 @@ server.get("/fitness", (req, res, next) => {
 
 // use - get, post, put, delete, patch, every REQUESTio
 server.use("/api/v1/users"  , UserActivityRouter);
+
+// new funcationality to create, delete, edit the blogs 
+server.use("/api/v1/blogs", BlogsRouter);
+
+
+// Connect to mongoDB 
+// read DB connection URL: "mongo_srv:<username>:<password>@<host>:<port>/<database>"
+const URL = "mongodb://localhost:27017/";
+const databaseName = "Crio-july-2026";
+
+const fullURL = `${URL}${databaseName}`;
+
+mongoose.connect(fullURL).then(() => {
+    console.log("Connected to mongoDB");
+}).catch((err) => {
+    console.log("Error connecting to mongoDB", err);
+});
 
 
 server.listen(PORT, () => {
