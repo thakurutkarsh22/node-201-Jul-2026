@@ -1,31 +1,37 @@
 const BlogModel = require("../Models/Blogs.Model");
+const { BlogService } = require("../Services/BlogsService");
 
 async function createBlog(req, res) {
 
     const { title, content, author = "Anonymous" } = req.body;
 
-    //  create the blog object 
-    const blog = BlogModel({ title, content, author });
+
 
     // we need to save this object in databse 
 
     try {
-        const response = await blog.save();
-        
-        res.status(201).json({
-            message: "Blog created successfully",
-            data: response,
-        });
-    } catch (error) {
-        res.status(500).json({
+        const response = await BlogService.createBlog({title, content, author});
+        if(response.error) {
+            return res.status(500).json({
+                message: "Error creating blog, server error",
+                error: response.message,
+            });
+        } else {
+            return res.status(201).json({
+                message: "Blog created successfully",
+                data: response,
+            });
+        }
+    }
+    catch(error) {
+        return res.status(500).json({
             message: "Error creating blog, server error",
             error: error,
         });
     }
-
 }
 
-function getBlogById(req, res) {
+async function getBlogById(req, res) {
 
 }
 
@@ -61,7 +67,7 @@ async function editBlogById(req, res) {
     }
 }
 
-function deleteBlogById(req, res) {
+async function deleteBlogById(req, res) {
 
 }
 

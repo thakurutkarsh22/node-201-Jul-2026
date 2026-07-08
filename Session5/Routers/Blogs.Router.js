@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const { createBlog, getBlogById, getAllBlogs, editBlogById, deleteBlogById } = require("../Controller/BlogController");
+const { BlogInputValidationMiddleware } = require("../Middleware/BlogInputValidationMiddleware");
 
 
 
 // create the blog - POST - /api/v1/blogs/createBlog
-router.post("/createBlog", createBlog);
+router.post("/createBlog", BlogInputValidationMiddleware, createBlog);
 
 
 // i want to get the blog by id 

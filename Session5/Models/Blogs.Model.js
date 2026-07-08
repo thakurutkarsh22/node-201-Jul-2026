@@ -1,4 +1,5 @@
 const { default: mongoose } = require("mongoose");
+const validatorPackage = require("validator");
 
 const blogSchema = mongoose.Schema({
     title: {
@@ -6,6 +7,25 @@ const blogSchema = mongoose.Schema({
         required: true,
         minlength: 3,
         maxlength: 100,
+        validate: (value) => {
+            // value is $%^$%&$%^&$%^*$%^*$%^*&$%^*$%^*$%^* comming from postman
+
+            for(let i = 0; i < value.length; i++) {
+                let char = value[i];
+
+                if(char === ' ' || 
+                    (char >= 'a' && char <= 'z') || 
+                    (char >= 'A' && char <= 'Z') || 
+                    (char >= '0' && char <= '9')) {
+                        continue;
+                } else {
+                    // we have one invalid character in the title
+                    return false;
+                }
+            }
+
+            return true;
+        }
     },
     content: {
         type: String,
@@ -18,6 +38,9 @@ const blogSchema = mongoose.Schema({
         required: true,
         minlength: 3,
         maxlength: 100,
+        validate: (value) => {
+            return validatorPackage.isAlpha(value); // it will return true or false
+        }
     },
 }, {timestamps: true})
 

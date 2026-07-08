@@ -1,4 +1,6 @@
-const SECRET_SERVER_PASSWORD = "asdf1234";
+require('dotenv').config()
+
+const SECRET_SERVER_PASSWORD = process.env.SECRET_SERVER_PASSWORD;
 
 function PasswordAuthMiddleware(req, res, next) {
     const header = req.headers; // { "Authorization": "asdf1234" }

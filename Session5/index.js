@@ -6,7 +6,8 @@ const UserActivityRouter = require("./Routers/UserActivity.Router");
 const HomeRouter = require("./Routers/Home.Router");
 const BlogsRouter = require("./Routers/Blogs.Router");
 const { default: mongoose } = require("mongoose");
-const PORT = 8091;
+require('dotenv').config()
+const PORT = process.env.PORT;
 
 
 
@@ -47,8 +48,8 @@ server.use("/api/v1/blogs", BlogsRouter);
 
 // Connect to mongoDB 
 // read DB connection URL: "mongo_srv:<username>:<password>@<host>:<port>/<database>"
-const URL = "mongodb://localhost:27017/";
-const databaseName = "Crio-july-2026";
+const URL = process.env.DB_URL;
+const databaseName = process.env.DB_NAME;
 
 const fullURL = `${URL}${databaseName}`;
 
