@@ -46,6 +46,10 @@ async function login(req, res) {
                 error: response,
             });
         } else {
+            const token = response?.token;
+            if(token) {
+                res.cookie("token", token, { httpOnly: true, secure: true, maxAge: 10000 });
+            }
             return res.status(200).json({
                 message: "User logged in successfully",
                 data: response,

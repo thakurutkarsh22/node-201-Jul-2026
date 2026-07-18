@@ -1,5 +1,9 @@
+require("dotenv").config();
 const UserModel = require("../Models/Users.Model");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = process.env.JWT_SECRET;
+
 
 class AuthService {
     static async register(name, email, password, age, gender) {
@@ -39,7 +43,15 @@ class AuthService {
             if(!isPasswordValid) {
                 return { message: "Invalid password", error: "Invalid password" };
             } else {
-                return { message: "User logged in successfully", data: userFromDatabase };
+                const payload = {
+                    name: userFromDatabase.name,
+                    email: userFromDatabase.email,
+                    age: userFromDatabase.age,
+                    gender: userFromDatabase.gender,
+                }
+                const jwtToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+
+                return { message: "User logged in successfully", data: userFromDatabase, token: jwtToken };
             }
         }
 
