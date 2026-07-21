@@ -9,9 +9,13 @@ const AuthRouter = require("./Routers/Auth.Router");
 const { default: mongoose } = require("mongoose");
 const passport = require("passport");
 const JwtPassport = require("./Config/JwtPassport");
+const cors = require("cors");
 
 require('dotenv').config()
 const PORT = process.env.PORT;
+
+
+server.use(cors());// this will allow all the clients from another IP/domain to talk to my server.
 
 JwtPassport(passport);
 // GooglePassport(passport); // we are telling my application this is a new way of authintication
